@@ -1,0 +1,11 @@
+{
+  "body": {
+    "pub_key": "377c2b6dbbbb388c4f1cb26d781f1f8fcb26819e6f924af3a34efb7cec704cd3",
+    "name": "Ben Juhn"
+  },
+  "network_id": 0,
+  "protocol_version": 0,
+  "service_id": 1,
+  "message_id": 1,
+  "signature": "ad5efdb52e48309df9aa582e67372bb3ae67828c5eaa1a7a5e387597174055d315eaa7879912d0509acf17f06a23b7f13f242017b354f682d85930fa28240402"
+}
