@@ -20,9 +20,9 @@ class MongoConnection {
 
 
     public MongoConnection() {
-        Mongo mongo = new Mongo("45.79.140.164", 27017);
-        DB db = mongo.getDB("test");
-        DBCollection collection = db.getCollection("blocks");
+        mongo = new Mongo("localhost", 27017);
+        db = mongo.getDB("test");
+        collection = db.getCollection("blocks");
     }
 
     public void addFile(String bucket, String filename, File file) throws IOException {
@@ -35,9 +35,6 @@ class MongoConnection {
     public void setDocument(String json) {
         Object o = com.mongodb.util.JSON.parse(json);
         DBObject dbObj = (DBObject) o;
-        Mongo mongo = new Mongo("45.79.140.164", 27017);
-        DB db = mongo.getDB("test");
-        DBCollection collection = db.getCollection("blocks");
         collection.insert(dbObj, WriteConcern.SAFE);
     }
 

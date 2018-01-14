@@ -17,6 +17,6 @@ public class MongoConnectionTest {
     public void testSet() throws Exception {
         MongoConnection connection = new MongoConnection();
         connection.setDocument(("{\"test\":\"b\"}"));
-        assert(1==2);
+
     }
 }

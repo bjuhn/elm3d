@@ -1,5 +1,7 @@
 package org.hetoh.anet;
 
+import ch.hsr.geohash.WGS84Point;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.ResourceHandler;
@@ -10,7 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 class PointCloudUploadHandler extends ResourceHandler {
 
@@ -32,7 +36,7 @@ class PointCloudUploadHandler extends ResourceHandler {
 
     private List<UpdateChainResponse> uploadPointCloud(HttpServletRequest request) {
         PointCloudUploadData data = createPointCloudUploadData(request);
-        List<JsonObject> docs = createDocs(data);
+        Map<String, JsonObject> docs = createBlocks(data);
 
         // need to make these a transaction:
         List<SaveResult> saveResult = saveDocs(docs);
@@ -47,17 +51,23 @@ class PointCloudUploadHandler extends ResourceHandler {
         return updateChainResponses;
     }
 
-    private List<JsonObject> createDocs(PointCloudUploadData data) {
-        List<JsonObject> docs = new ArrayList<JsonObject>();
+    private Map<String, JsonObject> createBlocks(PointCloudUploadData data) {
+        Map<String, JsonObject> docs = new HashMap<String, JsonObject>();
+
+        new WGS84Point(47.2342, 15.7465465);
+        Gson gson = new Gson();
+        for(PointData point : data.getPoints()) {
+            docs.put(point.getHash(), gson.toJsonTree(point).getAsJsonObject());
+        }
         return docs;
     }
 
-    private PointCloudUploadData createPointCloudUploadData(HttpServletRequest request) {
-        PointCloudUploadData pointCloudUploadData = new PointCloudUploadData();
+    public static PointCloudUploadData createPointCloudUploadData(HttpServletRequest request) {
+        PointCloudUploadData pointCloudUploadData = PointCloudUploadData.fromLas("/Users/bjuhn/Downloads/MastinLake9_001_colorized0.laz");
         return pointCloudUploadData;
     }
 
-    private List<SaveResult> saveDocs(List<JsonObject> docs) {
+    private List<SaveResult> saveDocs(Map<String, JsonObject> docs) {
         List<SaveResult> saveResults = new ArrayList<SaveResult>();
         MongoConnection mongoConnection = new MongoConnection();
         for (JsonObject doc : docs) {
