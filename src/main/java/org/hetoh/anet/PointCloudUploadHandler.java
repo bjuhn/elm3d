@@ -54,7 +54,12 @@ class PointCloudUploadHandler extends AbstractHandler {
 
     private List<UpdateChainResponse> updateChain(List<SaveResult> saveResults) {
         List<UpdateChainResponse> updateChainResponses = new ArrayList<UpdateChainResponse>();
+        ExonumClient exonumClient = new ExonumClient();
         for (SaveResult saveResult : saveResults) {
+            String from = "03e657ae71e51be60a45b4bd20bcf79ff52f0c037ae6da0540a0e0066132b472";
+            String to = "d1e877472a4585d515b13f52ae7bfded1ccea511816d7772cb17e1ab20830819";
+            int amount = 3030;
+            exonumClient.transferFunds(from, to, amount);
             BlockChainUpdated.register(saveResult);
         }
         return updateChainResponses;
@@ -89,6 +94,7 @@ class PointCloudUploadHandler extends AbstractHandler {
             logger.info("Hash: " + key.toString() + "    size: " + Integer.toString(docs.get(key).size()));
             JsonObject block = createBlock(key, docs.get(key));
             mongoConnection.setDocument(block.toString());
+            saveResults.add(new SaveResult());
         }
         return saveResults;
     }

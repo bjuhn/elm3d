@@ -18,9 +18,10 @@ class PointCloudUploadData {
 
         LASReader reader = new LASReader(new File(filename));
         for (LASPoint p : reader.getPoints()) {
-            PointData pointData = new PointData(p.getX(), p.getY(), p.getZ(), p.getRed(), p.getBlue(), p.getGreen());
+            PointData pointData = new PointData(p.getX(), p.getY(), p.getZ(), p.getRed(), p.getGreen(), p.getBlue());
             pointCloudUploadData.addPoint(pointData);
         }
+
         return pointCloudUploadData;
     }
 

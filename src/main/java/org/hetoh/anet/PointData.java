@@ -2,20 +2,20 @@ package org.hetoh.anet;
 
 public class PointData {
 
-    private final int blue;
-    private final int red;
+    private final int b;
+    private final int r;
     private final int y;
     private final int x;
     private final int z;
-    private final int green;
+    private final int g;
 
-    public PointData(int x, int y, int z, char red, char blue, char green) {
+    public PointData(int x, int y, int z, char r, char g, char b) {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.red = Character.getNumericValue(red);
-        this.blue = Character.getNumericValue(blue);
-        this.green = Character.getNumericValue(green);
+        this.r = (int)r & 0xFF;
+        this.g = (int)g & 0xFF;
+        this.b = (int)b & 0xFF;
     }
 
     public String getHash() {
