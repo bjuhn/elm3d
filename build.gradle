@@ -1,12 +1,25 @@
 apply plugin: 'java'
 
 
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.2'
+    }
+}
+
+apply plugin: 'com.github.johnrengelman.plugin-shadow'
+apply plugin: 'java'
+
 repositories {
     mavenCentral()
     flatDir {
         dirs 'libs'
     }
 }
+
 
 dependencies {
     compile group: 'commons-collections', name: 'commons-collections', version: '3.2.2'
@@ -15,6 +28,13 @@ dependencies {
     compile group: 'com.google.code.gson', name: 'gson', version: '2.8.2'
     compile group: 'com.github.mreutegg', name: 'laszip4j', version: '0.5-SNAPSHOT'
     compile group: 'ch.hsr', name: 'geohash', version: '1.3.0'
+    compile group: 'org.slf4j', name:'slf4j-api', version: '1.7.2'
     testCompile group: 'junit', name: 'junit', version: '4.+'
 }
 
+
+shadowJar {
+    baseName = 'shadow'
+    classifier = null
+    version = null
+}

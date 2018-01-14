@@ -1,12 +1,17 @@
 package org.hetoh.anet;
 
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.mongodb.*;
 import com.mongodb.gridfs.GridFS;
 import com.mongodb.gridfs.GridFSInputFile;
 
+import javax.swing.text.Document;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 class MongoConnection {
 
@@ -35,7 +40,33 @@ class MongoConnection {
     public void setDocument(String json) {
         Object o = com.mongodb.util.JSON.parse(json);
         DBObject dbObj = (DBObject) o;
-        collection.insert(dbObj, WriteConcern.SAFE);
+        DBCursor find = collection.find(dbObj);
+        if(find.size() > 0) {
+            collection.update(dbObj, dbObj);
+        }else{
+            collection.insert(dbObj);
+        }
+
     }
 
+    public JsonObject getDocumentById(String id, Gson gson) {
+        BasicDBObject whereQuery = new BasicDBObject();
+        whereQuery.put("_id", id);
+        DBCursor cursor = collection.find(whereQuery);
+        if(cursor.hasNext()) {
+            return (gson.toJsonTree(cursor.next())).getAsJsonObject();
+        }
+        return null;
+    }
+
+    public List<JsonObject> getDocumentsById(List<String> ids, Gson gson) {
+        List<JsonObject> docs = new ArrayList<JsonObject>();
+        for(String id : ids) {
+            JsonObject doc = getDocumentById(id, gson);
+            if(doc != null) {
+                docs.add(doc);
+            }
+        }
+        return docs;
+    }
 }
